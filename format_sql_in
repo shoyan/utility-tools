@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+#
+# 文字列をin句で使えるように「'',」 で囲む
+# 
+# Usage
+# ./format_sql_in /path/hoge/file_name.txt
+# 
+# Option
+# -b line_break
+#
+
+require 'optparse'
+
+opts = OptionParser.new
+opts.on('-b') { |v| $lb = true }
+opts.parse!
+
+file_name = ARGV[0]
+
+if $lb then
+  line_break = "\n"
+else
+  line_break = ''
+end
+
+text = ''
+f = open(file_name) 
+f.each_line { |line|
+  line.strip!.chomp!
+  text += "'#{line}', #{line_break}" 
+}
+
+puts "\n"
+puts text.strip!.sub(/,\n?$/, "") 
+puts "\n"
+
+f.close
